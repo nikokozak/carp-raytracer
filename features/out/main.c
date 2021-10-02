@@ -161,7 +161,7 @@ typedef struct {
     double y;
     double z;
     double w;
-} Tup;
+} Tuple;
 
 // Depth 3
 typedef struct {
@@ -347,6 +347,9 @@ typedef int(*Fn___int)();
 typedef void(*Fn___void)();
 
 // Depth 4
+typedef String(*Fn__bool_MUL__String)(bool*);
+
+// Depth 4
 typedef bool(*Fn__bool_MUL__bool)(bool*);
 
 // Depth 4
@@ -497,13 +500,19 @@ typedef Result__String_String(*Fn__String_Result__String_String)(String);
 typedef Result__bool_String(*Fn__String_Result__bool_String)(String);
 
 // Depth 6
-typedef bool(*Fn__Tup_MUL__Tup_MUL__bool)(Tup*, Tup*);
+typedef String(*Fn__Tuple_MUL__String)(Tuple*);
 
 // Depth 6
-typedef bool(*Fn__Tup_MUL__bool)(Tup*);
+typedef bool(*Fn__Tuple_MUL__Tuple_MUL__bool)(Tuple*, Tuple*);
 
 // Depth 6
-typedef double*(*Fn__Tup_MUL__double_MUL_)(Tup*);
+typedef bool(*Fn__Tuple_MUL__bool)(Tuple*);
+
+// Depth 6
+typedef double*(*Fn__Tuple_MUL__double_MUL_)(Tuple*);
+
+// Depth 6
+typedef Tuple(*Fn__Tuple_Tuple_Tuple)(Tuple, Tuple);
 
 // Depth 6
 typedef Maybe__Long(*Fn___Maybe__Long)();
@@ -530,10 +539,10 @@ typedef Result__bool_String(*Fn__bool_Result__bool_String)(bool);
 typedef Maybe__double(*Fn__double_Maybe__double)(double);
 
 // Depth 6
-typedef Tup(*Fn__double_double_double_Tup)(double, double, double);
+typedef Tuple(*Fn__double_double_double_Tuple)(double, double, double);
 
 // Depth 6
-typedef Tup(*Fn__double_double_double_double_Tup)(double, double, double, double);
+typedef Tuple(*Fn__double_double_double_double_Tuple)(double, double, double, double);
 
 // Depth 6
 typedef Maybe__float(*Fn__float_Maybe__float)(float);
@@ -1930,16 +1939,13 @@ Pattern__Lambda_global_MINUS_match_MINUS_str_16_env_ty* Pattern__Lambda_global_M
 void Pattern__Lambda_global_MINUS_match_MINUS_str_16_env_ty_delete(Pattern__Lambda_global_MINUS_match_MINUS_str_16_env_ty* p);
 
 // Depth 500
-Tup a;
+int addition_MINUS_tests();
 
 // Depth 500
 int id__int(int x);
 
 // Depth 500
 int main(int argc, char** argv);
-
-// Depth 500
-Tup make_MINUS_point(double x, double y, double z);
 
 // Depth 500
 int max__int(int a, int b);
@@ -1957,25 +1963,16 @@ bool null_QMARK___CChar(CChar* p);
 bool null_QMARK___FILE(FILE* p);
 
 // Depth 500
-Tup point(double x, double y, double z);
-
-// Depth 500
 int point_MINUS_tests();
 
 // Depth 500
-bool point_QMARK_(Tup* tuple);
+Tuple ta;
 
 // Depth 500
-int tests();
-
-// Depth 500
-Tup vector(double x, double y, double z);
+Tuple tb;
 
 // Depth 500
 int vector_MINUS_tests();
-
-// Depth 500
-bool vector_QMARK_(Tup* tuple);
 
 // Depth 1000
 
@@ -3960,70 +3957,91 @@ TestState Test_State_update_MINUS_passed(TestState p, Lambda *updater);
 // Depth 1000
 
 // Depth 500
-bool Tup__EQ_(Tup* o1, Tup* o2);
+bool Tuple__EQ_(Tuple* o1, Tuple* o2);
 
 // Depth 500
-Tup Tup_copy(Tup* pRef);
+Tuple Tuple_add(Tuple a, Tuple b);
 
 // Depth 500
-void Tup_delete(Tup p);
+Tuple Tuple_copy(Tuple* pRef);
 
 // Depth 500
-Tup Tup_init(double x, double y, double z, double w);
+void Tuple_delete(Tuple p);
 
 // Depth 500
-String Tup_prn(Tup *p);
+bool Tuple_equal_QMARK_(Tuple* tuplea, Tuple* tupleb);
 
 // Depth 500
-Tup Tup_set_MINUS_w(Tup p, double newValue);
+bool Tuple_equal_QMARK___Tuple_MUL_(Tuple* tuplea, Tuple* tupleb);
 
 // Depth 500
-void Tup_set_MINUS_w_BANG_(Tup* pRef, double newValue);
+Tuple Tuple_init(double x, double y, double z, double w);
 
 // Depth 500
-Tup Tup_set_MINUS_x(Tup p, double newValue);
+Tuple Tuple_point(double x, double y, double z);
 
 // Depth 500
-void Tup_set_MINUS_x_BANG_(Tup* pRef, double newValue);
+bool Tuple_point_QMARK_(Tuple* tuple);
 
 // Depth 500
-Tup Tup_set_MINUS_y(Tup p, double newValue);
+String Tuple_prn(Tuple *p);
 
 // Depth 500
-void Tup_set_MINUS_y_BANG_(Tup* pRef, double newValue);
+Tuple Tuple_set_MINUS_w(Tuple p, double newValue);
 
 // Depth 500
-Tup Tup_set_MINUS_z(Tup p, double newValue);
+void Tuple_set_MINUS_w_BANG_(Tuple* pRef, double newValue);
 
 // Depth 500
-void Tup_set_MINUS_z_BANG_(Tup* pRef, double newValue);
+Tuple Tuple_set_MINUS_x(Tuple p, double newValue);
 
 // Depth 500
-String Tup_str(Tup *p);
+void Tuple_set_MINUS_x_BANG_(Tuple* pRef, double newValue);
 
 // Depth 500
-Tup Tup_update_MINUS_w(Tup p, Lambda *updater);
+Tuple Tuple_set_MINUS_y(Tuple p, double newValue);
 
 // Depth 500
-Tup Tup_update_MINUS_x(Tup p, Lambda *updater);
+void Tuple_set_MINUS_y_BANG_(Tuple* pRef, double newValue);
 
 // Depth 500
-Tup Tup_update_MINUS_y(Tup p, Lambda *updater);
+Tuple Tuple_set_MINUS_z(Tuple p, double newValue);
 
 // Depth 500
-Tup Tup_update_MINUS_z(Tup p, Lambda *updater);
+void Tuple_set_MINUS_z_BANG_(Tuple* pRef, double newValue);
 
 // Depth 500
-double* Tup_w(Tup* p);
+String Tuple_str(Tuple *p);
 
 // Depth 500
-double* Tup_x(Tup* p);
+Tuple Tuple_update_MINUS_w(Tuple p, Lambda *updater);
 
 // Depth 500
-double* Tup_y(Tup* p);
+Tuple Tuple_update_MINUS_x(Tuple p, Lambda *updater);
 
 // Depth 500
-double* Tup_z(Tup* p);
+Tuple Tuple_update_MINUS_y(Tuple p, Lambda *updater);
+
+// Depth 500
+Tuple Tuple_update_MINUS_z(Tuple p, Lambda *updater);
+
+// Depth 500
+Tuple Tuple_vector(double x, double y, double z);
+
+// Depth 500
+bool Tuple_vector_QMARK_(Tuple* tuple);
+
+// Depth 500
+double* Tuple_w(Tuple* p);
+
+// Depth 500
+double* Tuple_x(Tuple* p);
+
+// Depth 500
+double* Tuple_y(Tuple* p);
+
+// Depth 500
+double* Tuple_z(Tuple* p);
 
 // Depth 1000
 
@@ -4217,10 +4235,16 @@ void carp_init_globals(int argc, char** argv) {
         Set_dflt_MINUS_len = 256;
     }
 
-    // Depth 1
+    // Depth 2
     {
-        Tup _7 = Tup_init(4.3, -4.2, 3.1, 1.0);
-        a = _7;
+        Tuple _6 = Tuple_point(1.0, 1.0, 1.0);
+        tb = _6;
+    }
+
+    // Depth 2
+    {
+        Tuple _6 = Tuple_point(1.0, 1.0, 1.0);
+        ta = _6;
     }
 
     // Depth 2
@@ -13191,25 +13215,25 @@ int Test_run_MINUS_child_MINUS_signals(Lambda x) {
     return _59;
 }
 
-bool Tup__EQ_(Tup* o1, Tup* o2) {
+bool Tuple__EQ_(Tuple* o1, Tuple* o2) {
     bool _65;
-    double* _9 = Tup_w(o1);
-    double* _12 = Tup_w(o2);
+    double* _9 = Tuple_w(o1);
+    double* _12 = Tuple_w(o2);
     bool _13 = DoubleRef__EQ_(_9, _12);
     if (_13) {
         bool _60;
-        double* _19 = Tup_z(o1);
-        double* _22 = Tup_z(o2);
+        double* _19 = Tuple_z(o1);
+        double* _22 = Tuple_z(o2);
         bool _23 = DoubleRef__EQ_(_19, _22);
         if (_23) {
             bool _55;
-            double* _29 = Tup_y(o1);
-            double* _32 = Tup_y(o2);
+            double* _29 = Tuple_y(o1);
+            double* _32 = Tuple_y(o2);
             bool _33 = DoubleRef__EQ_(_29, _32);
             if (_33) {
                 bool _50;
-                double* _39 = Tup_x(o1);
-                double* _42 = Tup_x(o2);
+                double* _39 = Tuple_x(o1);
+                double* _42 = Tuple_x(o2);
                 bool _43 = DoubleRef__EQ_(_39, _42);
                 if (_43) {
                     bool _46 = true;
@@ -13239,8 +13263,43 @@ bool Tup__EQ_(Tup* o1, Tup* o2) {
     return _65;
 }
 
-Tup Tup_copy(Tup* pRef) {
-    Tup copy = *pRef;
+Tuple Tuple_add(Tuple a, Tuple b) {
+    Tuple* _11 = &a; // ref
+    double* _12 = Tuple_x(_11);
+    double _13 = Double_copy(_12);
+    Tuple* _18 = &b; // ref
+    double* _19 = Tuple_x(_18);
+    double _20 = Double_copy(_19);
+    double _21 = Double__PLUS_(_13, _20);
+    Tuple* _27 = &a; // ref
+    double* _28 = Tuple_y(_27);
+    double _29 = Double_copy(_28);
+    Tuple* _34 = &b; // ref
+    double* _35 = Tuple_y(_34);
+    double _36 = Double_copy(_35);
+    double _37 = Double__PLUS_(_29, _36);
+    Tuple* _43 = &a; // ref
+    double* _44 = Tuple_z(_43);
+    double _45 = Double_copy(_44);
+    Tuple* _50 = &b; // ref
+    double* _51 = Tuple_z(_50);
+    double _52 = Double_copy(_51);
+    double _53 = Double__PLUS_(_45, _52);
+    Tuple* _59 = &a; // ref
+    double* _60 = Tuple_w(_59);
+    double _61 = Double_copy(_60);
+    Tuple* _66 = &b; // ref
+    double* _67 = Tuple_w(_66);
+    double _68 = Double_copy(_67);
+    double _69 = Double__PLUS_(_61, _68);
+    Tuple _70 = Tuple_init(_21, _37, _53, _69);
+    Tuple_delete(a);
+    Tuple_delete(b);
+    return _70;
+}
+
+Tuple Tuple_copy(Tuple* pRef) {
+    Tuple copy = *pRef;
     /* Ignore non-managed member 'x' : Double */
     /* Ignore non-managed member 'y' : Double */
     /* Ignore non-managed member 'z' : Double */
@@ -13248,15 +13307,25 @@ Tup Tup_copy(Tup* pRef) {
     return copy;
 }
 
-void Tup_delete(Tup p) {
+void Tuple_delete(Tuple p) {
     /* Ignore non-managed member 'x' : Double */
     /* Ignore non-managed member 'y' : Double */
     /* Ignore non-managed member 'z' : Double */
     /* Ignore non-managed member 'w' : Double */
 }
 
-Tup Tup_init(double x, double y, double z, double w) {
-    Tup instance;
+bool Tuple_equal_QMARK_(Tuple* tuplea, Tuple* tupleb) {
+    bool _8 = Tuple__EQ_(tuplea, tupleb);
+    return _8;
+}
+
+bool Tuple_equal_QMARK___Tuple_MUL_(Tuple* tuplea, Tuple* tupleb) {
+    bool _8 = Tuple__EQ_(tuplea, tupleb);
+    return _8;
+}
+
+Tuple Tuple_init(double x, double y, double z, double w) {
+    Tuple instance;
     instance.x = x;
     instance.y = y;
     instance.z = z;
@@ -13264,12 +13333,25 @@ Tup Tup_init(double x, double y, double z, double w) {
     return instance;
 }
 
-String Tup_prn(Tup *p) {
+Tuple Tuple_point(double x, double y, double z) {
+    Tuple _11 = Tuple_init(x, y, z, 1.0);
+    return _11;
+}
+
+bool Tuple_point_QMARK_(Tuple* tuple) {
+    double* _7 = Tuple_w(tuple);
+    static double _10_lit = 1.0;
+    double* _10 = &_10_lit; // ref
+    bool _11 = DoubleRef__EQ_(_7, _10);
+    return _11;
+}
+
+String Tuple_prn(Tuple *p) {
   // convert members to String here:
   String temp = NULL;
   int tempsize = 0;
   (void)tempsize; // that way we remove the occasional unused warning 
-  int size = snprintf(NULL, 0, "(%s )", "Tup");
+  int size = snprintf(NULL, 0, "(%s )", "Tuple");
   temp = Double_prn(p->x); 
   size += snprintf(NULL, 0, "%s ", temp);
   if(temp) { CARP_FREE(temp); temp = NULL; }
@@ -13290,8 +13372,8 @@ String Tup_prn(Tup *p) {
   String buffer = CARP_MALLOC(size);
   String bufferPtr = buffer;
 
-  sprintf(bufferPtr, "(%s ", "Tup");
-  bufferPtr += strlen("Tup") + 2;
+  sprintf(bufferPtr, "(%s ", "Tuple");
+  bufferPtr += strlen("Tuple") + 2;
 
   temp = Double_prn(p->x);
   sprintf(bufferPtr, "%s ", temp);
@@ -13318,64 +13400,64 @@ String Tup_prn(Tup *p) {
   return buffer;
 }
 
-Tup Tup_set_MINUS_w(Tup p, double newValue) {
+Tuple Tuple_set_MINUS_w(Tuple p, double newValue) {
     /* Ignore non-managed member 'w' : Double */
     p.w = newValue;
     return p;
 }
 
 
-void Tup_set_MINUS_w_BANG_(Tup* pRef, double newValue) {
+void Tuple_set_MINUS_w_BANG_(Tuple* pRef, double newValue) {
     /* Ignore non-managed member 'w' : Double */
     pRef->w = newValue;
 }
 
 
-Tup Tup_set_MINUS_x(Tup p, double newValue) {
+Tuple Tuple_set_MINUS_x(Tuple p, double newValue) {
     /* Ignore non-managed member 'x' : Double */
     p.x = newValue;
     return p;
 }
 
 
-void Tup_set_MINUS_x_BANG_(Tup* pRef, double newValue) {
+void Tuple_set_MINUS_x_BANG_(Tuple* pRef, double newValue) {
     /* Ignore non-managed member 'x' : Double */
     pRef->x = newValue;
 }
 
 
-Tup Tup_set_MINUS_y(Tup p, double newValue) {
+Tuple Tuple_set_MINUS_y(Tuple p, double newValue) {
     /* Ignore non-managed member 'y' : Double */
     p.y = newValue;
     return p;
 }
 
 
-void Tup_set_MINUS_y_BANG_(Tup* pRef, double newValue) {
+void Tuple_set_MINUS_y_BANG_(Tuple* pRef, double newValue) {
     /* Ignore non-managed member 'y' : Double */
     pRef->y = newValue;
 }
 
 
-Tup Tup_set_MINUS_z(Tup p, double newValue) {
+Tuple Tuple_set_MINUS_z(Tuple p, double newValue) {
     /* Ignore non-managed member 'z' : Double */
     p.z = newValue;
     return p;
 }
 
 
-void Tup_set_MINUS_z_BANG_(Tup* pRef, double newValue) {
+void Tuple_set_MINUS_z_BANG_(Tuple* pRef, double newValue) {
     /* Ignore non-managed member 'z' : Double */
     pRef->z = newValue;
 }
 
 
-String Tup_str(Tup *p) {
+String Tuple_str(Tuple *p) {
   // convert members to String here:
   String temp = NULL;
   int tempsize = 0;
   (void)tempsize; // that way we remove the occasional unused warning 
-  int size = snprintf(NULL, 0, "(%s )", "Tup");
+  int size = snprintf(NULL, 0, "(%s )", "Tuple");
   temp = Double_prn(p->x); 
   size += snprintf(NULL, 0, "%s ", temp);
   if(temp) { CARP_FREE(temp); temp = NULL; }
@@ -13396,8 +13478,8 @@ String Tup_str(Tup *p) {
   String buffer = CARP_MALLOC(size);
   String bufferPtr = buffer;
 
-  sprintf(bufferPtr, "(%s ", "Tup");
-  bufferPtr += strlen("Tup") + 2;
+  sprintf(bufferPtr, "(%s ", "Tuple");
+  bufferPtr += strlen("Tuple") + 2;
 
   temp = Double_prn(p->x);
   sprintf(bufferPtr, "%s ", temp);
@@ -13424,37 +13506,50 @@ String Tup_str(Tup *p) {
   return buffer;
 }
 
-Tup Tup_update_MINUS_w(Tup p, Lambda *updater) {
+Tuple Tuple_update_MINUS_w(Tuple p, Lambda *updater) {
     p.w = (*updater).env ? ((Fn__LambdaEnv_double_double)(*updater).callback)((*updater).env, p.w) : ((Fn__double_double)(*updater).callback)(p.w);
     return p;
 }
 
 
-Tup Tup_update_MINUS_x(Tup p, Lambda *updater) {
+Tuple Tuple_update_MINUS_x(Tuple p, Lambda *updater) {
     p.x = (*updater).env ? ((Fn__LambdaEnv_double_double)(*updater).callback)((*updater).env, p.x) : ((Fn__double_double)(*updater).callback)(p.x);
     return p;
 }
 
 
-Tup Tup_update_MINUS_y(Tup p, Lambda *updater) {
+Tuple Tuple_update_MINUS_y(Tuple p, Lambda *updater) {
     p.y = (*updater).env ? ((Fn__LambdaEnv_double_double)(*updater).callback)((*updater).env, p.y) : ((Fn__double_double)(*updater).callback)(p.y);
     return p;
 }
 
 
-Tup Tup_update_MINUS_z(Tup p, Lambda *updater) {
+Tuple Tuple_update_MINUS_z(Tuple p, Lambda *updater) {
     p.z = (*updater).env ? ((Fn__LambdaEnv_double_double)(*updater).callback)((*updater).env, p.z) : ((Fn__double_double)(*updater).callback)(p.z);
     return p;
 }
 
 
-double* Tup_w(Tup* p) { return (&(p->w)); }
+Tuple Tuple_vector(double x, double y, double z) {
+    Tuple _11 = Tuple_init(x, y, z, 0.0);
+    return _11;
+}
 
-double* Tup_x(Tup* p) { return (&(p->x)); }
+bool Tuple_vector_QMARK_(Tuple* tuple) {
+    double* _7 = Tuple_w(tuple);
+    static double _10_lit = 0.0;
+    double* _10 = &_10_lit; // ref
+    bool _11 = DoubleRef__EQ_(_7, _10);
+    return _11;
+}
 
-double* Tup_y(Tup* p) { return (&(p->y)); }
+double* Tuple_w(Tuple* p) { return (&(p->w)); }
 
-double* Tup_z(Tup* p) { return (&(p->z)); }
+double* Tuple_x(Tuple* p) { return (&(p->x)); }
+
+double* Tuple_y(Tuple* p) { return (&(p->y)); }
+
+double* Tuple_z(Tuple* p) { return (&(p->z)); }
 
 Uint16 Uint16_blit(Uint16 x) {
     Uint16 _7 = x; // From the 'the' function.
@@ -13643,26 +13738,60 @@ bool UnitRef__EQ_() {
     return true;
 }
 
+int addition_MINUS_tests() {
+    int _64;
+    /* let */ {
+        Tuple _10 = Tuple_init(3.0, -2.0, 5.0, 1.0);
+        Tuple a = _10;
+        Tuple _17 = Tuple_init(-2.0, 3.0, 1.0, 0.0);
+        Tuple b = _17;
+        int _63;
+        /* let */ {
+            TestState _25 = Test_State_init(0, 0);
+            TestState* _26 = &_25; // ref
+            TestState* test = _26;
+            Tuple _39 = Tuple_add(a, b);
+            Tuple* _40 = &_39; // ref
+            Tuple _47 = Tuple_init(1.0, 1.0, 6.0, 1.0);
+            Tuple* _48 = &_47; // ref
+            bool _49 = Tuple__EQ_(_40, _48);
+            static String _50 = "Adds Tuples correctly";
+            String *_50_ref = &_50;
+            TestState _51 = Test_assert_MINUS_true__String(test, _49, _50_ref);
+            TestState* _52 = &_51; // ref
+            test = _52;  // (Ref Test.State r31) = (Ref Test.State r31)
+            Test_print_MINUS_test_MINUS_results(test);
+            int* _60 = Test_State_failed(test);
+            int _61 = Int_copy(_60);
+            int _62 = _61;
+            _63 = _62;
+            Test_State_delete(_25);
+            Test_State_delete(_51);
+            Tuple_delete(_39);
+            Tuple_delete(_47);
+        }
+        _64 = _63;
+    }
+    return _64;
+}
+
 int id__int(int x) {
     return x;
 }
 
 int main(int argc, char** argv) {
     carp_init_globals(argc, argv);
-    Array _9 = { .len = 2, .capacity = 2, .data = CARP_MALLOC(sizeof(int) * 2) };
+    Array _11 = { .len = 3, .capacity = 3, .data = CARP_MALLOC(sizeof(int) * 3) };
     int _6 = point_MINUS_tests();
-    ((int*)_9.data)[0] = _6;
+    ((int*)_11.data)[0] = _6;
     int _8 = vector_MINUS_tests();
-    ((int*)_9.data)[1] = _8;
-    Array__int* _10 = &_9; // ref
-    int _11 = Array_sum__int(_10);
-    Array_delete__int(_9);
-    return _11;
-}
-
-Tup make_MINUS_point(double x, double y, double z) {
-    Tup _11 = Tup_init(x, y, z, 1.0);
-    return _11;
+    ((int*)_11.data)[1] = _8;
+    int _10 = addition_MINUS_tests();
+    ((int*)_11.data)[2] = _10;
+    Array__int* _12 = &_11; // ref
+    int _13 = Array_sum__int(_12);
+    Array_delete__int(_11);
+    return _13;
 }
 
 int max__int(int a, int b) {
@@ -13708,23 +13837,18 @@ bool null_QMARK___FILE(FILE* p) {
     return _12;
 }
 
-Tup point(double x, double y, double z) {
-    Tup _11 = Tup_init(x, y, z, 1.0);
-    return _11;
-}
-
 int point_MINUS_tests() {
     int _154;
     /* let */ {
-        Tup _10 = Tup_init(4.3, -4.2, 3.1, 1.0);
-        Tup p = _10;
+        Tuple _10 = Tuple_init(4.3, -4.2, 3.1, 1.0);
+        Tuple p = _10;
         int _153;
         /* let */ {
             TestState _18 = Test_State_init(0, 0);
             TestState* _19 = &_18; // ref
             TestState* test = _19;
-            Tup* _30 = &p; // ref
-            double* _31 = Tup_x(_30);
+            Tuple* _30 = &p; // ref
+            double* _31 = Tuple_x(_30);
             static double _34_lit = 4.3;
             double* _34 = &_34_lit; // ref
             static String _35 = "Point x is correctly set";
@@ -13732,8 +13856,8 @@ int point_MINUS_tests() {
             TestState _36 = Test_assert_MINUS_equal__double_MUL__String(test, _31, _34, _35_ref);
             TestState* _37 = &_36; // ref
             test = _37;  // (Ref Test.State r84) = (Ref Test.State r84)
-            Tup* _47 = &p; // ref
-            double* _48 = Tup_y(_47);
+            Tuple* _47 = &p; // ref
+            double* _48 = Tuple_y(_47);
             static double _51_lit = -4.2;
             double* _51 = &_51_lit; // ref
             static String _52 = "Point y is correctly set";
@@ -13741,8 +13865,8 @@ int point_MINUS_tests() {
             TestState _53 = Test_assert_MINUS_equal__double_MUL__String(test, _48, _51, _52_ref);
             TestState* _54 = &_53; // ref
             test = _54;  // (Ref Test.State r84) = (Ref Test.State r84)
-            Tup* _64 = &p; // ref
-            double* _65 = Tup_z(_64);
+            Tuple* _64 = &p; // ref
+            double* _65 = Tuple_z(_64);
             static double _68_lit = 3.1;
             double* _68 = &_68_lit; // ref
             static String _69 = "Point z is correctly set";
@@ -13750,8 +13874,8 @@ int point_MINUS_tests() {
             TestState _70 = Test_assert_MINUS_equal__double_MUL__String(test, _65, _68, _69_ref);
             TestState* _71 = &_70; // ref
             test = _71;  // (Ref Test.State r84) = (Ref Test.State r84)
-            Tup* _81 = &p; // ref
-            double* _82 = Tup_w(_81);
+            Tuple* _81 = &p; // ref
+            double* _82 = Tuple_w(_81);
             static double _85_lit = 1.0;
             double* _85 = &_85_lit; // ref
             static String _86 = "Point w is correctly set";
@@ -13759,26 +13883,26 @@ int point_MINUS_tests() {
             TestState _87 = Test_assert_MINUS_equal__double_MUL__String(test, _82, _85, _86_ref);
             TestState* _88 = &_87; // ref
             test = _88;  // (Ref Test.State r84) = (Ref Test.State r84)
-            Tup* _98 = &p; // ref
-            bool _99 = point_QMARK_(_98);
+            Tuple* _98 = &p; // ref
+            bool _99 = Tuple_point_QMARK_(_98);
             static String _100 = "Tuple with weight 1.0 is a point";
             String *_100_ref = &_100;
             TestState _101 = Test_assert_MINUS_true__String(test, _99, _100_ref);
             TestState* _102 = &_101; // ref
             test = _102;  // (Ref Test.State r84) = (Ref Test.State r84)
-            Tup* _112 = &p; // ref
-            bool _113 = vector_QMARK_(_112);
+            Tuple* _112 = &p; // ref
+            bool _113 = Tuple_vector_QMARK_(_112);
             static String _114 = "Tuple with weight 1.0 is not a vector";
             String *_114_ref = &_114;
             TestState _115 = Test_assert_MINUS_false__String(test, _113, _114_ref);
             TestState* _116 = &_115; // ref
             test = _116;  // (Ref Test.State r84) = (Ref Test.State r84)
-            Tup _129 = point(4.0, -4.0, 3.0);
-            Tup* _130 = &_129; // ref
-            Tup _137 = Tup_init(4.0, -4.0, 3.0, 1.0);
-            Tup* _138 = &_137; // ref
-            bool _139 = Tup__EQ_(_130, _138);
-            static String _140 = "Creates a point correctly";
+            Tuple _129 = Tuple_point(4.0, -4.0, 3.0);
+            Tuple* _130 = &_129; // ref
+            Tuple _137 = Tuple_init(4.0, -4.0, 3.0, 1.0);
+            Tuple* _138 = &_137; // ref
+            bool _139 = Tuple__EQ_(_130, _138);
+            static String _140 = "point creates a Tuple with weight 1";
             String *_140_ref = &_140;
             TestState _141 = Test_assert_MINUS_true__String(test, _139, _140_ref);
             TestState* _142 = &_141; // ref
@@ -13796,93 +13920,27 @@ int point_MINUS_tests() {
             Test_State_delete(_53);
             Test_State_delete(_70);
             Test_State_delete(_87);
-            Tup_delete(_129);
-            Tup_delete(_137);
+            Tuple_delete(_129);
+            Tuple_delete(_137);
         }
         _154 = _153;
-        Tup_delete(p);
+        Tuple_delete(p);
     }
     return _154;
-}
-
-bool point_QMARK_(Tup* tuple) {
-    double* _7 = Tup_w(tuple);
-    static double _10_lit = 1.0;
-    double* _10 = &_10_lit; // ref
-    bool _11 = DoubleRef__EQ_(_7, _10);
-    return _11;
-}
-
-int tests() {
-    int _83;
-    /* let */ {
-        Tup _10 = Tup_init(4.3, -4.2, 3.1, 1.0);
-        Tup a = _10;
-        int _82;
-        /* let */ {
-            TestState _18 = Test_State_init(0, 0);
-            TestState* _19 = &_18; // ref
-            TestState* test = _19;
-            Tup* _30 = &a; // ref
-            double* _31 = Tup_x(_30);
-            static double _34_lit = 4.3;
-            double* _34 = &_34_lit; // ref
-            static String _35 = "Point x is correctly set";
-            String *_35_ref = &_35;
-            TestState _36 = Test_assert_MINUS_equal__double_MUL__String(test, _31, _34, _35_ref);
-            TestState* _37 = &_36; // ref
-            test = _37;  // (Ref Test.State r46) = (Ref Test.State r46)
-            Tup* _47 = &a; // ref
-            double* _48 = Tup_y(_47);
-            static double _51_lit = -4.2;
-            double* _51 = &_51_lit; // ref
-            static String _52 = "Point y is correctly set";
-            String *_52_ref = &_52;
-            TestState _53 = Test_assert_MINUS_equal__double_MUL__String(test, _48, _51, _52_ref);
-            TestState* _54 = &_53; // ref
-            test = _54;  // (Ref Test.State r46) = (Ref Test.State r46)
-            Tup* _64 = &a; // ref
-            double* _65 = Tup_z(_64);
-            static double _68_lit = 3.1;
-            double* _68 = &_68_lit; // ref
-            static String _69 = "Point z is correctly set";
-            String *_69_ref = &_69;
-            TestState _70 = Test_assert_MINUS_equal__double_MUL__String(test, _65, _68, _69_ref);
-            TestState* _71 = &_70; // ref
-            test = _71;  // (Ref Test.State r46) = (Ref Test.State r46)
-            Test_print_MINUS_test_MINUS_results(test);
-            int* _79 = Test_State_failed(test);
-            int _80 = Int_copy(_79);
-            int _81 = _80;
-            _82 = _81;
-            Test_State_delete(_18);
-            Test_State_delete(_36);
-            Test_State_delete(_53);
-            Test_State_delete(_70);
-        }
-        _83 = _82;
-        Tup_delete(a);
-    }
-    return _83;
-}
-
-Tup vector(double x, double y, double z) {
-    Tup _11 = Tup_init(x, y, z, 0.0);
-    return _11;
 }
 
 int vector_MINUS_tests() {
     int _154;
     /* let */ {
-        Tup _10 = Tup_init(4.3, -4.2, 3.1, 0.0);
-        Tup v = _10;
+        Tuple _10 = Tuple_init(4.3, -4.2, 3.1, 0.0);
+        Tuple v = _10;
         int _153;
         /* let */ {
             TestState _18 = Test_State_init(0, 0);
             TestState* _19 = &_18; // ref
             TestState* test = _19;
-            Tup* _30 = &v; // ref
-            double* _31 = Tup_x(_30);
+            Tuple* _30 = &v; // ref
+            double* _31 = Tuple_x(_30);
             static double _34_lit = 4.3;
             double* _34 = &_34_lit; // ref
             static String _35 = "Point x is correctly set";
@@ -13890,8 +13948,8 @@ int vector_MINUS_tests() {
             TestState _36 = Test_assert_MINUS_equal__double_MUL__String(test, _31, _34, _35_ref);
             TestState* _37 = &_36; // ref
             test = _37;  // (Ref Test.State r84) = (Ref Test.State r84)
-            Tup* _47 = &v; // ref
-            double* _48 = Tup_y(_47);
+            Tuple* _47 = &v; // ref
+            double* _48 = Tuple_y(_47);
             static double _51_lit = -4.2;
             double* _51 = &_51_lit; // ref
             static String _52 = "Point y is correctly set";
@@ -13899,8 +13957,8 @@ int vector_MINUS_tests() {
             TestState _53 = Test_assert_MINUS_equal__double_MUL__String(test, _48, _51, _52_ref);
             TestState* _54 = &_53; // ref
             test = _54;  // (Ref Test.State r84) = (Ref Test.State r84)
-            Tup* _64 = &v; // ref
-            double* _65 = Tup_z(_64);
+            Tuple* _64 = &v; // ref
+            double* _65 = Tuple_z(_64);
             static double _68_lit = 3.1;
             double* _68 = &_68_lit; // ref
             static String _69 = "Point z is correctly set";
@@ -13908,8 +13966,8 @@ int vector_MINUS_tests() {
             TestState _70 = Test_assert_MINUS_equal__double_MUL__String(test, _65, _68, _69_ref);
             TestState* _71 = &_70; // ref
             test = _71;  // (Ref Test.State r84) = (Ref Test.State r84)
-            Tup* _81 = &v; // ref
-            double* _82 = Tup_w(_81);
+            Tuple* _81 = &v; // ref
+            double* _82 = Tuple_w(_81);
             static double _85_lit = 0.0;
             double* _85 = &_85_lit; // ref
             static String _86 = "Point w is correctly set";
@@ -13917,26 +13975,26 @@ int vector_MINUS_tests() {
             TestState _87 = Test_assert_MINUS_equal__double_MUL__String(test, _82, _85, _86_ref);
             TestState* _88 = &_87; // ref
             test = _88;  // (Ref Test.State r84) = (Ref Test.State r84)
-            Tup* _98 = &v; // ref
-            bool _99 = point_QMARK_(_98);
+            Tuple* _98 = &v; // ref
+            bool _99 = Tuple_point_QMARK_(_98);
             static String _100 = "Tuple with weight 1.0 is a vector";
             String *_100_ref = &_100;
             TestState _101 = Test_assert_MINUS_false__String(test, _99, _100_ref);
             TestState* _102 = &_101; // ref
             test = _102;  // (Ref Test.State r84) = (Ref Test.State r84)
-            Tup* _112 = &v; // ref
-            bool _113 = vector_QMARK_(_112);
+            Tuple* _112 = &v; // ref
+            bool _113 = Tuple_vector_QMARK_(_112);
             static String _114 = "Tuple with weight 1.0 is not a point";
             String *_114_ref = &_114;
             TestState _115 = Test_assert_MINUS_true__String(test, _113, _114_ref);
             TestState* _116 = &_115; // ref
             test = _116;  // (Ref Test.State r84) = (Ref Test.State r84)
-            Tup _129 = vector(4.0, -4.0, 3.0);
-            Tup* _130 = &_129; // ref
-            Tup _137 = Tup_init(4.0, -4.0, 3.0, 0.0);
-            Tup* _138 = &_137; // ref
-            bool _139 = Tup__EQ_(_130, _138);
-            static String _140 = "Creates a vector correctly";
+            Tuple _129 = Tuple_vector(4.0, -4.0, 3.0);
+            Tuple* _130 = &_129; // ref
+            Tuple _137 = Tuple_init(4.0, -4.0, 3.0, 0.0);
+            Tuple* _138 = &_137; // ref
+            bool _139 = Tuple__EQ_(_130, _138);
+            static String _140 = "vector creates a Tuple with w 0";
             String *_140_ref = &_140;
             TestState _141 = Test_assert_MINUS_true__String(test, _139, _140_ref);
             TestState* _142 = &_141; // ref
@@ -13954,20 +14012,12 @@ int vector_MINUS_tests() {
             Test_State_delete(_53);
             Test_State_delete(_70);
             Test_State_delete(_87);
-            Tup_delete(_129);
-            Tup_delete(_137);
+            Tuple_delete(_129);
+            Tuple_delete(_137);
         }
         _154 = _153;
-        Tup_delete(v);
+        Tuple_delete(v);
     }
     return _154;
-}
-
-bool vector_QMARK_(Tup* tuple) {
-    double* _7 = Tup_w(tuple);
-    static double _10_lit = 0.0;
-    double* _10 = &_10_lit; // ref
-    bool _11 = DoubleRef__EQ_(_7, _10);
-    return _11;
 }
 

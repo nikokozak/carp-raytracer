@@ -1,0 +1,8 @@
+;; Assorted Utils
+
+;; Monkeypatch Double type
+(defmodule Double
+    (doc equal? "Alias for Double.approx - precision of 0.00001")
+    (sig equal? (Fn [Double, Double] Bool))
+    (defn equal? [a, b] (Double.approx a b)))
+
