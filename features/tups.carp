@@ -1,0 +1,90 @@
+;; The Tuple Datatype
+(load-and-use Test)
+(Project.config "title" "tuples")
+
+(deftype Tup
+  [x Double, y Double, z Double, w Double])
+(derive Tup =)
+
+(sig point (Fn [Double Double Double] Tup))
+(defn point [x y z]
+      (Tup.init x y z 1.0))
+
+(sig vector (Fn [Double Double Double] Tup))
+(defn vector [x y z]
+      (Tup.init x y z 0.0))
+
+(sig point? (Fn [&Tup] Bool))
+(defn point? [tuple]
+      (= (Tup.w tuple) &1.0))
+
+(sig vector? (Fn [&Tup] Bool))
+(defn vector? [tuple]
+      (= (Tup.w tuple) &0.0))
+
+;; Tests
+
+(defn point-tests []
+      (let [p (Tup.init 4.3 -4.2 3.1 1.0)]
+        (with-test test
+                   (assert-equal test
+                                 (Tup.x &p)
+                                 &4.3
+                                 "Point x is correctly set")
+                   (assert-equal test
+                                 (Tup.y &p)
+                                 &-4.2
+                                 "Point y is correctly set")
+                   (assert-equal test
+                                 (Tup.z &p)
+                                 &3.1
+                                 "Point z is correctly set")
+                   (assert-equal test
+                                 (Tup.w &p)
+                                 &1.0
+                                 "Point w is correctly set")
+                   (assert-true test
+                                (point? &p)
+                                "Tuple with weight 1.0 is a point")
+                   (assert-false test
+                                 (vector? &p)
+                                 "Tuple with weight 1.0 is not a vector")
+                   (assert-true test
+                                (Tup.= &(point 4.0 -4.0 3.0)
+                                 &(Tup.init 4.0 -4.0 3.0 1.0))
+                                 "Creates a point correctly"))))
+
+(defn vector-tests []
+      (let [v (Tup.init 4.3 -4.2 3.1 0.0)]
+        (with-test test
+                   (assert-equal test
+                                 (Tup.x &v)
+                                 &4.3
+                                 "Point x is correctly set")
+                   (assert-equal test
+                                 (Tup.y &v)
+                                 &-4.2
+                                 "Point y is correctly set")
+                   (assert-equal test
+                                 (Tup.z &v)
+                                 &3.1
+                                 "Point z is correctly set")
+                   (assert-equal test
+                                 (Tup.w &v)
+                                 &0.0
+                                 "Point w is correctly set")
+                   (assert-false test
+                                (point? &v)
+                                "Tuple with weight 1.0 is a vector")
+                   (assert-true test
+                                 (vector? &v)
+                                 "Tuple with weight 1.0 is not a point")
+                   (assert-true test
+                                (Tup.= &(vector 4.0 -4.0 3.0)
+                                       &(Tup.init 4.0 -4.0 3.0 0.0))
+                                "Creates a vector correctly"))))
+
+(defn main []
+      (Array.sum &[
+                   (point-tests)
+                   (vector-tests)]))
