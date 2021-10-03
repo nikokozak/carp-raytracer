@@ -1,0 +1,30 @@
+(load "../features/tups.carp")
+
+(use Tuple)
+
+(deftype Projectile [position Tuple velocity Tuple])
+(deftype Environment [gravity Tuple wind Tuple])
+
+(defn tick [env proj]
+  (let-do [position (add (Projectile.position proj)
+                      (Projectile.velocity proj))
+        velocity (add (Projectile.velocity proj)
+                      &(add (Environment.gravity env)
+                            (Environment.wind env)))]
+    (println* "The position is: " (str @(Tuple.y (Projectile.position proj))))
+    (Projectile.init position velocity)))
+
+(defn end-condition [projectile]
+  (do
+    (<= @(Tuple.y (Projectile.position projectile)) 0.0)))
+
+(defn run [e p c]
+  (unless (~c p) ;; This is a de-reference, which is necessary to invoke our function!!!
+          (run e &(tick e p) c)))
+
+(defn main []
+  (let [p (Projectile.init (point 0.0 1.0 0.0) (norm &(vector 1.0 1.0 0.0)))
+        e (Environment.init (vector 0.0 -0.1 0.0) (vector -0.01 0.0 0.0))]
+    (run &e &p &end-condition)))
+
+    
