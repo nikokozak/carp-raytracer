@@ -47,6 +47,23 @@
                     "Can extract blue value")
       )))
 
+
+(use Vector3)
+(defn-do my-equal [v1 v2]
+  (cond
+    (not (Double.= @(x v1) @(x v2))) (do
+                              (IO.println "X are not equal")
+                              (println* "X1 is: " (x v1))
+                              (println* "X2 is: " (x v2))
+                              false)
+    (not (= (y v1) (y v2))) (do
+                        (IO.println "Y are not equal")
+                        false)
+    (not (= (z v1) (z v2))) (do
+                        (IO.println "Z are not equal")
+                        false)
+    true))
+
 (defn arithmetic-tests []
   (let [c1 (RayColor.init 0.9 0.6 0.75)
         c2 (RayColor.init 0.7 0.1 0.25)
@@ -59,16 +76,20 @@
       (assert-true test
                    (let-do [result (Vector3.sub &(Vector3.init 0.9 0.6 0.75) &(Vector3.init 0.7 0.1 0.25))
                             compare (Vector3.init 0.2 0.5 0.5)]
-                     (println* "Result Red: " (red &result))
-                     (println* "Compare Red: " (red &compare))
-                     (println* "Result Green: " (green &result))
-                     (println* "Compare Green: " (green &compare))
-                     (println* "Result Blue: " (blue &result))
-                     (println* "Compare Blue: " (blue &compare))
+                     (println* "Result x: " (x &result))
+                     (println* "Compare x: " (x &compare))
+                     (println* "Result y: " (y &result))
+                     (println* "Compare y: " (y &compare))
+                     (println* "Result z: " (z &result))
+                     (println* "Compare z: " (z &compare))
                      (println* "Result: " &result)
                      (println* "Compare: " &compare)
                      (= &result
                         &compare))
+                   "Can subtract two colors")
+      (assert-true test
+                   (my-equal &(Vector3.sub &(Vector3.init 0.9 0.6 0.75) &(Vector3.init 0.7 0.1 0.25))
+                       &(Vector3.init 0.2 0.5 0.5))
                     "Can subtract two colors")
       (assert-true test
                     (= &(RayColor.mul &c3 2.0)
