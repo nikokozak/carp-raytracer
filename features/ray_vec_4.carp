@@ -1,0 +1,346 @@
+(load-and-use Test)
+
+(deftype RayVec4 [x Double, y Double, z Double, w Double])
+(derive RayVec4 =) ;; automatically derive implementation of "="
+
+(defmodule RayVec4
+  ;; kinda like monkey-patching in Ruby
+  ;; we open up the namespace again.
+  (implements = RayVec4.=)
+  (implements + RayVec4.add-take)
+  (implements - RayVec4.sub-take)
+
+  (sig point (Fn [Double Double Double] RayVec4))
+  (defn point [x y z]
+    (init x y z 1.0))
+
+  (sig vector (Fn [Double Double Double] RayVec4))
+  (defn vector [x y z]
+    (init x y z 0.0))
+
+  (sig point? (Fn [&RayVec4] Bool))
+  (defn point? [tuple]
+    (= (w tuple) &1.0))
+
+  (sig vector? (Fn [&RayVec4] Bool))
+  (defn vector? [tuple]
+    (= (w tuple) &0.0))
+
+  (sig equal? (Fn [&RayVec4 &RayVec4] Bool))
+  (defn equal? [tuplea tupleb]
+    (= tuplea tupleb))
+
+  (sig add (Fn [&RayVec4 &RayVec4] RayVec4))
+  (doc add "Adds two RayVec4s")
+  (eval
+   `(defn add [a b] ;; Example of a "naive" macro. Decided against this for readibility's sake.
+      `(RayVec4.init
+        %@(map (fn [prop] `(+ @(%prop a) @(%prop b))) '(x y z w)))))
+
+  (private add-take)
+  (hidden add-take)
+  (sig add-take (Fn [RayVec4 RayVec4] RayVec4))
+  (doc add-take "Adds two RayVec4s, taking ownership")
+  (defn add-take [a b]
+    (init
+     (+ @(x &a) @(x &b))
+     (+ @(y &a) @(y &b))
+     (+ @(z &a) @(z &b))
+     (+ @(w &a) @(w &b))))
+
+  (sig sub (Fn [&RayVec4 &RayVec4] RayVec4))
+  (doc sub "Subtracts two RayVec4s")
+  (defn sub [a b]
+    (RayVec4.init
+     (- @(x a) @(x b))
+     (- @(y a) @(y b))
+     (- @(z a) @(z b))
+     (- @(w a) @(w b))))  
+
+  (hidden sub-take)
+  (hidden add-take)
+  (sig sub-take (Fn [RayVec4 RayVec4] RayVec4))
+  (doc sub-take "Subtracts two RayVec4s, taking ownership")
+  (defn sub-take [a b]
+    (RayVec4.init
+     (- @(x &a) @(x &b))
+     (- @(y &a) @(y &b))
+     (- @(z &a) @(z &b))
+     (- @(w &a) @(w &b))))  
+
+  (sig negate (Fn [&RayVec4] RayVec4))
+  (doc negate "Mulitplies a RayVec4 by -1")
+  (defn negate [tuple]
+    (RayVec4.init
+     (* -1.0 @(x tuple))
+     (* -1.0 @(y tuple))
+     (* -1.0 @(z tuple))
+     (* -1.0 @(w tuple))))
+
+  (sig mul (Fn [&RayVec4 Double] RayVec4))
+  (doc mul "Multiplies a RayVec4 by a scalar")
+  (defn mul [tuple scalar]
+    (RayVec4.init
+     (* scalar @(x tuple))
+     (* scalar @(y tuple))
+     (* scalar @(z tuple))
+     (* scalar @(w tuple))))
+
+  (sig div (Fn [&RayVec4 Double] RayVec4))
+  (doc div "Divides a RayVec4 by a scalar")
+  (defn div [tuple scalar]
+    (RayVec4.init
+     (/ @(x tuple) scalar)
+     (/ @(y tuple) scalar)
+     (/ @(z tuple) scalar)
+     (/ @(w tuple) scalar)))
+
+  (sig mag (Fn [&RayVec4] Double))
+  (doc mag "Calculates the magnitude of a RayVec4")
+  (defn mag [tuple]
+    (sqrt
+     (+ (pow @(x tuple) 2.0)
+        (+ (pow @(y tuple) 2.0) 
+           (pow @(z tuple) 2.0)))))
+
+  (sig norm (Fn [&RayVec4] RayVec4))
+  (doc norm "Normalizes a RayVec4")
+  (defn norm [tuple]
+    (RayVec4.init
+     (/ @(x tuple) (mag tuple))
+     (/ @(y tuple) (mag tuple))
+     (/ @(z tuple) (mag tuple))
+     @(w tuple)))
+
+  (sig dot (Fn [&RayVec4 &RayVec4] Double))
+  (doc dot "Calculates the dot product of two RayVec4s")
+  (defn dot [a b]
+    (+ (* @(x a) @(x b))
+       (+ (* @(y a) @(y b))
+          (+ (* @(z a) @(z b))
+             (* @(w a) @(w b))))))
+
+  (sig cross (Fn [&RayVec4 &RayVec4] RayVec4))
+  (doc cross "Calculates the dot product - use ONLY WITH VECTORS")
+  (defn cross [a b]
+    (vector
+     (- (* @(y a) @(z b))
+        (* @(z a) @(y b)))
+     (- (* @(z a) @(x b))
+        (* @(x a) @(z b)))
+     (- (* @(x a) @(y b))
+        (* @(y a) @(x b))))))
+
+;; Tests
+
+(use RayVec4)
+
+(defn point-tests []
+  (let [p (RayVec4.init 4.3 -4.2 3.1 1.0)]
+    (with-test test
+      (assert-equal test
+                    (RayVec4.x &p)
+                    &4.3
+                    "Point x is correctly set")
+      (assert-equal test
+                    (RayVec4.y &p)
+                    &-4.2
+                    "Point y is correctly set")
+      (assert-equal test
+                    (RayVec4.z &p)
+                    &3.1
+                    "Point z is correctly set")
+      (assert-equal test
+                    (RayVec4.w &p)
+                    &1.0
+                    "Point w is correctly set")
+      (assert-true test
+                   (point? &p)
+                   "RayVec4 with weight 1.0 is a point")
+      (assert-false test
+                    (vector? &p)
+                    "RayVec4 with weight 1.0 is not a vector")
+      (assert-true test
+                   (= &(point 4.0 -4.0 3.0)
+                      &(RayVec4.init 4.0 -4.0 3.0 1.0))
+                   "point creates a RayVec4 with weight 1"))))
+
+(defn vector-tests []
+  (let [v (RayVec4.init 4.3 -4.2 3.1 0.0)]
+    (with-test test
+      (assert-equal test
+                    (RayVec4.x &v)
+                    &4.3
+                    "Point x is correctly set")
+      (assert-equal test
+                    (RayVec4.y &v)
+                    &-4.2
+                    "Point y is correctly set")
+      (assert-equal test
+                    (RayVec4.z &v)
+                    &3.1
+                    "Point z is correctly set")
+      (assert-equal test
+                    (RayVec4.w &v)
+                    &0.0
+                    "Point w is correctly set")
+      (assert-false test
+                    (point? &v)
+                    "RayVec4 with weight 1.0 is a vector")
+      (assert-true test
+                   (vector? &v)
+                   "RayVec4 with weight 1.0 is not a point")
+      (assert-true test
+                   (= &(vector 4.0 -4.0 3.0)
+                      &(RayVec4.init 4.0 -4.0 3.0 0.0))
+                   "vector creates a RayVec4 with w 0"))))
+
+(defn addition-tests []
+  (let [a (RayVec4.init 3.0 -2.0 5.0 1.0)
+        b (RayVec4.init -2.0 3.0 1.0 0.0)]
+
+    (with-test test
+      (assert-true test
+                   (= &(add &a &b)
+                      &(RayVec4.init 1.0 1.0 6.0 1.0))
+                   "Adds RayVec4s correctly")
+      (assert-true test
+                   (= &(add &a &b)
+                      &(RayVec4.init 1.0 1.0 6.0 1.0))
+                   "Adds RayVec4s correctly with same references")
+      (assert-true test
+                   (= &(+ a b)
+                      &(RayVec4.init 1.0 1.0 6.0 1.0))
+                   "Adds RayVec4s correctly with ownership"))))
+
+(defn subtraction-tests []
+  (let [p1 (point 3.0 2.0 1.0)
+        p2 (point 5.0 6.0 7.0)
+        v1 (vector 5.0 6.0 7.0)
+        v2 (vector 3.0 2.0 1.0)
+        vz (vector 0.0 0.0 0.0)]
+
+    (with-test test
+      (assert-true test
+                   (= &(sub &p1 &p2)
+                      &(vector -2.0 -4.0 -6.0))
+                   "point - point = vector")
+      (assert-true test
+                   (= &(sub &p1 &v1)
+                      &(point -2.0 -4.0 -6.0))
+                   "point - vector = point") 
+      (assert-true test
+                   (= &(sub &v2 &v1)
+                      &(vector -2.0 -4.0 -6.0))
+                   "vector - vector = vector")
+      (assert-true test
+                   (= &(sub &v2 &v1)
+                      &(vector -2.0 -4.0 -6.0))
+                   "Subtracts correctly with same references")
+      (assert-true test
+                   (= &(- v2 v1)
+                      &(vector -2.0 -4.0 -6.0))
+                   "Subtracts correctly with ownership"))))
+
+(defn multiplication-tests []
+  (let [a (RayVec4.init 1.0 -2.0 3.0 -4.0)]
+    (with-test test
+      (assert-true test
+                   (= &(mul &a 3.5)
+                      &(RayVec4.init 3.5 -7.0 10.5 -14.0))
+                   "Multiplies RayVec4s correctly")
+      (assert-true test
+                   (= &(mul &a 0.5)
+                      &(RayVec4.init 0.5 -1.0 1.5 -2.0))
+                   "Multiplies RayVec4s by fractions correctly"))))
+
+(defn division-tests []
+  (let [a (RayVec4.init 1.0 -2.0 3.0 -4.0)]
+    (with-test test
+      (assert-true test
+                   (= &(div &a 2.0)
+                      &(RayVec4.init 0.5 -1.0 1.5 -2.0))
+                   "Divides RayVec4s correctly"))))
+
+(defn magnitude-tests []
+  (let [a (vector 1.0 0.0 0.0)
+        b (vector 0.0 1.0 0.0)
+        c (vector 0.0 0.0 1.0)
+        d (vector 1.0 2.0 3.0)
+        e (vector -1.0 -2.0 -3.0)]
+    (with-test test
+      (assert-true test
+                   (= (mag &a)
+                      1.0)
+                   "Magnitude of 1,0,0")
+      (assert-true test
+                   (= (mag &b)
+                      1.0)
+                   "Magnitude of 0,1,0")
+      (assert-true test
+                   (= (mag &c)
+                      1.0)
+                   "Magnitude of 0,0,1")
+      (assert-true test
+                   (= (mag &d)
+                      (sqrt 14.0))
+                   "Magnitude of 1,2,3")
+      (assert-true test
+                   (= (mag &e)
+                      (sqrt 14.0))
+                   "Magnitude of -1,-2,-3"))))
+
+(defn normalization-tests []
+  (let [a (vector 4.0 0.0 0.0)
+        b (vector 1.0 2.0 3.0) ]
+    (with-test test
+      (assert-true test
+                   (= &(norm &a)
+                      &(vector 1.0 0.0 0.0))
+                   "Normalizes 4,0,0 correctly")
+      (assert-true test
+                   (= &(norm &b)
+                      &(vector
+                        (/ 1.0 (sqrt 14.0))
+                        (/ 2.0 (sqrt 14.0))
+                        (/ 3.0 (sqrt 14.0))))
+                   "Normalizes 1,2,3 correctly")
+      (assert-true test
+                   (= (mag &(norm &b))
+                      1.0)
+                   "Magnitude of normalized is 1"))))
+
+(defn dot-product-tests []
+  (let [a (vector 2.0 3.0 4.0)
+        b (vector 1.0 2.0 3.0) ]
+    (with-test test
+      (assert-true test
+                   (= (dot &a &b)
+                      20.0)
+                   "Calculates the dot product")
+      )))
+
+(defn dot-product-tests []
+  (let [b (vector 2.0 3.0 4.0)
+        a (vector 1.0 2.0 3.0) ]
+    (with-test test
+      (assert-true test
+                   (= &(cross &a &b)
+                      &(vector -1.0 2.0 -1.0))
+                   "Calculates the cross product")
+      (assert-true test
+                   (= &(cross &b &a)
+                      &(vector 1.0 -2.0 1.0))
+                   "Calculates the cross product in order"))))
+
+(defn main []
+  (Array.sum &[
+               (point-tests)
+               (vector-tests)
+               (addition-tests)
+               (subtraction-tests)
+               (multiplication-tests)
+               (division-tests)
+               (magnitude-tests)
+               (normalization-tests)
+               (dot-product-tests)]))

@@ -1,0 +1,93 @@
+;; A Macro for Tuple-based Double-member type creation
+
+;; Eventually decided against this for RayTracer - Vectors and Points have a different behavior than say,
+;; Colors. This makes it so that implementing this as a Macro makes little sense, given that things like
+;; Vectors and Macros have to be compatible types, while Colors don't.
+
+;; What I instead did is defined the Vec4 class for points and vectors (notice they aren't formal types),
+;; and used some defdynamic functions to shorten definitions whithin that module
+
+(use Dynamic)
+(load "IO.carp")
+(use IO)
+
+(defmodule RTuple
+
+  ;; TODO: Map prop types to VectorN (VectorN.a: arr length, VectorN.v: arr value)
+  (defndynamic def-tuple-type [name props]
+    (let [prop-dec (reduce
+                    (fn [accum, val] (cons val (cons 'Double accum))) ;; add a Double type to each field
+                    '[]
+                    (reverse props))]
+      `(deftype %name %prop-dec)))
+
+  ;; TODO: Figure out how to turn this into a proper macro :/
+  (defndynamic build-dot-fn [props]
+    (if (empty? (cddr props))
+      `(+ (* @(%(car props) t1) @(%(car props) t2))
+          (* @(%(cadr props) t1) @(%(cadr props) t2)))
+      `(+ (* @(%(car props) t1) @(%(cadr props) t2)) %(build-nested-fn (cdr props)))))
+
+  (defndynamic def-tuple-module [name props]
+    `(defmodule %name
+
+       (implements + %(Symbol.prefix name 'add-take))
+       (implements - %(Symbol.prefix name 'add-take))
+       (implements * %(Symbol.prefix name 'mul-take))
+
+       (defn add [t1 t2]
+         (%(Symbol.prefix name 'init)
+           %@(map (fn [prop] `(+ @(%prop t1) @(%prop t2))) props)))
+
+       (defn add-take [t1 t2]
+         (%(Symbol.prefix name 'init)
+           %@(map (fn [prop] `(+ @(%prop &t1) @(%prop &t2))) props)))
+
+       (defn sub [t1 t2]
+         (%(Symbol.prefix name 'init)
+           %@(map (fn [prop] `(- @(%prop t1) @(%prop t2))) props)))
+
+       (defn sub-take [t1 t2]
+         (%(Symbol.prefix name 'init)
+           %@(map (fn [prop] `(+ @(%prop &t1) @(%prop &t2))) props)))
+
+       (defn negate [tup]
+         (%(Symbol.prefix name 'init)
+           %@(map (fn [prop] `(* -1.0 @(%prop tup))) props)))
+
+       (defn mul [tup scalar]
+         (%(Symbol.prefix name 'init)
+           %@(map (fn [prop] `(* @(%prop tup) scalar)) props)))
+
+       (defn mul-take [t1 t2]
+         (%(Symbol.prefix name 'init)
+           %@(map (fn [prop] `(* @(%prop &t1) @(%prop &t2))) props)))
+
+       (defn div [tup scalar]
+         (%(Symbol.prefix name 'init)
+           %@(map (fn [prop] `(/ @(%prop tup) scalar)) props)))
+
+       (defn dot [t1 t2]
+         %(build-dot-fn props))) 
+    )
+
+    (defmacro rtuple [name :rest prop-names]
+      (do
+        (eval (def-tuple-type name prop-names))
+        (eval (def-tuple-module name prop-names))))
+
+  )
+  
+
+;(double-tuple CoordinateW x y z w) -> (VectorN 4 [1 2 3 1])
+;(double-tuple Color r g b) -> (VectorN 3 [1 2 3])
+
+;(double-tuple CoordinateW x y z w) -> (VectorN 4 [1 2 3 1])
+;->
+;(deftype CoordinateW [x Double y Double z Double w Double]) ;; Macro
+;(defmodule CoordinateW ;; Macro   
+;  (defn add [v1 v2]
+;    ...))
+
+;(defmodule CoordinateW
+;  (defn point [x y z] (init x y z 1.0)))

@@ -1,0 +1,82 @@
+(load-and-use Test)
+(load "Vector.carp")
+
+;(deftype RayColor Vector3)
+
+(defmodule RayColor
+  (use Vector3) ;; Contrary to my initial belief, we can't "inherit" this way.
+
+  (defn init [r g b] ;; Therefore this is necessary.
+    (Vector3.init r g b))
+
+  (defn red [color]
+    @(Vector3.x color))
+
+  (defn green [color]
+    @(Vector3.y color))
+
+  (defn blue [color]
+    @(Vector3.z color))
+
+  (defn add [c1 c2]
+    (Vector3.add c1 c2))
+
+  (defn sub [c1 c2]
+    (Vector3.sub c1 c2))
+
+  (defn mul [c scalar]
+    (Vector3.mul c scalar))
+
+  (defn div [c scalar]
+    (Vector3.div c scalar)))
+
+(defn init-tests []
+  (let [c (RayColor.init -0.5 0.4 1.7)]
+    (with-test test
+      (assert-equal test
+                    (RayColor.red &c)
+                    -0.5
+                    "Can extract red value")
+      (assert-equal test
+                    (RayColor.green &c)
+                    0.4
+                    "Can extract green value")
+      (assert-equal test
+                    (RayColor.blue &c)
+                    1.7
+                    "Can extract blue value")
+      )))
+
+(defn arithmetic-tests []
+  (let [c1 (RayColor.init 0.9 0.6 0.75)
+        c2 (RayColor.init 0.7 0.1 0.25)
+        c3 (RayColor.init 0.2 0.3 0.4)]
+    (with-test test
+     (assert-true test
+                   (= &(RayColor.add &c1 &c2)
+                      &(RayColor.init 1.6 0.7 1.0))
+                   "Can add two colors")
+      (assert-true test
+                   (let-do [result (RayColor.sub &c1 &c2)
+                            compare (RayColor.init 0.2 0.5 0.5)]
+                     (println* "Result Red: " (red &result))
+                     (println* "Result Green: " (green &result))
+                     (println* "Result Blue: " (blue &result))
+                     (println* "Compare Red: " (red &compare))
+                     (println* "Compare Green: " (green &compare))
+                     (println* "Compare Blue: " (blue &compare))
+                     (println* "Result: " &result)
+                     (println* "Compare: " &compare)
+                     (= &result
+                        &compare))
+                    "Can subtract two colors")
+      (assert-true test
+                    (= &(RayColor.mul &c3 2.0)
+                       &(RayColor.init 0.4 0.6 0.8))
+                    "Can multiply a color by a scalar")
+      )))
+
+(defn main []
+  (Array.sum &[
+               (init-tests)
+               (arithmetic-tests)]))
