@@ -6,13 +6,24 @@
 (deftype Environment [gravity Tuple wind Tuple])
 
 (defn tick [env proj]
-  (let-do [position (add (Projectile.position proj)
-                      (Projectile.velocity proj))
-        velocity (add (Projectile.velocity proj)
-                      &(add (Environment.gravity env)
-                            (Environment.wind env)))]
+  (let-do [position (+ @(Projectile.position proj)
+                       @(Projectile.velocity proj))
+           velocity (+ @(Projectile.velocity proj)
+                       (+ @(Environment.gravity env)
+                          @(Environment.wind env)))]
     (println* "The position is: " (str @(Tuple.y (Projectile.position proj))))
     (Projectile.init position velocity)))
+
+;; Depending on whether or not we want to actually pass references and avoid all this copying of types,
+;; we can use this version:
+;;   (defn tick [env proj]
+;;   (let-do [position (add (Projectile.position proj)
+;;                           (Projectile.velocity proj))
+;;           velocity (add (Projectile.velocity proj)
+;;                           &(add (Environment.gravity env)
+;;                               (Environment.wind env)))]
+;;       (println* "The position is: " (str @(Tuple.y (Projectile.position proj))))
+;;       (Projectile.init position velocity)))
 
 (defn end-condition [projectile]
   (do

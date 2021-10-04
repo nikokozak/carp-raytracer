@@ -7,7 +7,9 @@
 (defmodule Tuple
            ;; kinda like monkey-patching in Ruby
            ;; we open up the namespace again.
-           (implements = Tuple.=)
+  (implements = Tuple.=)
+  (implements + Tuple.add-take)
+  (implements - Tuple.sub-take)
 
            (sig point (Fn [Double Double Double] Tuple))
            (defn point [x y z]
@@ -38,6 +40,17 @@
                   (+ @(z a) @(z b))
                   (+ @(w a) @(w b))))
 
+  (private add-take)
+  (hidden add-take)
+  (sig add-take (Fn [Tuple Tuple] Tuple))
+  (doc add-take "Adds two Tuples, taking ownership")
+  (defn add-take [a b]
+    (init
+     (+ @(x &a) @(x &b))
+     (+ @(y &a) @(y &b))
+     (+ @(z &a) @(z &b))
+     (+ @(w &a) @(w &b))))
+
            (sig sub (Fn [&Tuple &Tuple] Tuple))
            (doc sub "Subtracts two Tuples")
            (defn sub [a b]
@@ -46,6 +59,17 @@
                    (- @(y a) @(y b))
                    (- @(z a) @(z b))
                    (- @(w a) @(w b))))  
+
+  (hidden sub-take)
+  (hidden add-take)
+  (sig sub-take (Fn [Tuple Tuple] Tuple))
+  (doc sub-take "Subtracts two Tuples, taking ownership")
+  (defn sub-take [a b]
+    (Tuple.init
+     (- @(x &a) @(x &b))
+     (- @(y &a) @(y &b))
+     (- @(z &a) @(z &b))
+     (- @(w &a) @(w &b))))  
 
            (sig negate (Fn [&Tuple] Tuple))
            (doc negate "Mulitplies a Tuple by -1")
@@ -186,7 +210,11 @@
                    (assert-true test
                                 (= &(add &a &b)
                                    &(Tuple.init 1.0 1.0 6.0 1.0))
-                                "Adds Tuples correctly"))))
+                                "Adds Tuples correctly with same references")
+                   (assert-true test
+                                (= &(+ a b)
+                                   &(Tuple.init 1.0 1.0 6.0 1.0))
+                                "Adds Tuples correctly with ownership"))))
 
 (defn subtraction-tests []
       (let [p1 (point 3.0 2.0 1.0)
@@ -207,7 +235,15 @@
                    (assert-true test
                                 (= &(sub &v2 &v1)
                                    &(vector -2.0 -4.0 -6.0))
-                                "vector - vector = vector"))))
+                                "vector - vector = vector")
+                   (assert-true test
+                                (= &(sub &v2 &v1)
+                                   &(vector -2.0 -4.0 -6.0))
+                                "Subtracts correctly with same references")
+                   (assert-true test
+                                (= &(- v2 v1)
+                                   &(vector -2.0 -4.0 -6.0))
+                                "Subtracts correctly with ownership"))))
 
 (defn multiplication-tests []
       (let [a (Tuple.init 1.0 -2.0 3.0 -4.0)]
