@@ -28,6 +28,12 @@
   (defn mul [c scalar]
     (Vector3.mul c scalar))
 
+  (defn hadamard-product [c1 c2]
+    (Vector3.init
+     (* (red c1) (red c2))
+     (* (green c1) (green c2))
+     (* (blue c1) (blue c2))))
+
   (defn div [c scalar]
     (Vector3.div c scalar))
 
@@ -77,6 +83,10 @@
                    (RayColor.equal? &(RayColor.mul &c3 2.0)
                                     &(RayColor.init 0.4 0.6 0.8))
                    "Can multiply a color by a scalar")
+      (assert-true test
+                   (RayColor.equal? &(RayColor.hadamard-product &c1 &c2)
+                                    &(RayColor.init 0.63 0.06 0.1875))
+                   "Hadamard Product multiplication")
       )))
 
 (defn main []
