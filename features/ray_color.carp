@@ -49,19 +49,21 @@
 
 
 (use Vector3)
+
+;; Attempt at figuring what's going on.
 (defn-do my-equal [v1 v2]
   (cond
     (not (Double.= @(x v1) @(x v2))) (do
-                              (IO.println "X are not equal")
-                              (println* "X1 is: " (x v1))
-                              (println* "X2 is: " (x v2))
-                              false)
+                                       (IO.println "X are not equal")
+                                       (println* "X1 is: " (x v1))
+                                       (println* "X2 is: " (x v2))
+                                       false)
     (not (= (y v1) (y v2))) (do
-                        (IO.println "Y are not equal")
-                        false)
+                              (IO.println "Y are not equal")
+                              false)
     (not (= (z v1) (z v2))) (do
-                        (IO.println "Z are not equal")
-                        false)
+                              (IO.println "Z are not equal")
+                              false)
     true))
 
 (defn arithmetic-tests []
@@ -73,7 +75,7 @@
                    (= &(RayColor.add &c1 &c2)
                       &(RayColor.init 1.6 0.7 1.0))
                    "Can add two colors")
-      (assert-true test
+      (assert-true test ;; This fails invariably
                    (let-do [result (Vector3.sub &(Vector3.init 0.9 0.6 0.75) &(Vector3.init 0.7 0.1 0.25))
                             compare (Vector3.init 0.2 0.5 0.5)]
                      (println* "Result x: " (x &result))
@@ -86,8 +88,8 @@
                      (println* "Compare: " &compare)
                      (= &result
                         &compare))
-                   "Can subtract two colors")
-      (assert-true test
+                   "Can subtract two vectors")
+      (assert-true test ;; This should pass put fails as well
                    (my-equal &(Vector3.sub &(Vector3.init 0.9 0.6 0.75) &(Vector3.init 0.7 0.1 0.25))
                        &(Vector3.init 0.2 0.5 0.5))
                     "Can subtract two colors")
