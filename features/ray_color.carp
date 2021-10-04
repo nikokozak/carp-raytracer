@@ -6,7 +6,8 @@
 (defmodule RayColor
   (use Vector3) ;; Contrary to my initial belief, we can't "inherit" this way.
 
-  (defn init [r g b] ;; Therefore this is necessary.
+  (sig init (Fn [Double Double Double] Vector3))
+  (defn-do init [r g b] ;; Therefore this is necessary.
     (Vector3.init r g b))
 
   (defn red [color]
@@ -28,7 +29,16 @@
     (Vector3.mul c scalar))
 
   (defn div [c scalar]
-    (Vector3.div c scalar)))
+    (Vector3.div c scalar))
+
+  (defn equal? [c1 c2]
+    (and (Double.approx (red c1)
+                 (red c2))
+         (Double.approx (green c1)
+                 (green c2))
+         (Double.approx (blue c1)
+                 (blue c2))))
+  )
 
 (defn init-tests []
   (let [c (RayColor.init -0.5 0.4 1.7)]
@@ -50,53 +60,23 @@
 
 (use Vector3)
 
-;; Attempt at figuring what's going on.
-(defn-do my-equal [v1 v2]
-  (cond
-    (not (Double.= @(x v1) @(x v2))) (do
-                                       (IO.println "X are not equal")
-                                       (println* "X1 is: " (x v1))
-                                       (println* "X2 is: " (x v2))
-                                       false)
-    (not (= (y v1) (y v2))) (do
-                              (IO.println "Y are not equal")
-                              false)
-    (not (= (z v1) (z v2))) (do
-                              (IO.println "Z are not equal")
-                              false)
-    true))
-
 (defn arithmetic-tests []
   (let [c1 (RayColor.init 0.9 0.6 0.75)
         c2 (RayColor.init 0.7 0.1 0.25)
         c3 (RayColor.init 0.2 0.3 0.4)]
     (with-test test
-     (assert-true test
-                   (= &(RayColor.add &c1 &c2)
-                      &(RayColor.init 1.6 0.7 1.0))
+      (assert-true test
+                   (RayColor.equal? &(RayColor.add &c1 &c2)
+                                 &(RayColor.init 1.6 0.7 1.0))
                    "Can add two colors")
       (assert-true test ;; This fails invariably
-                   (let-do [result (Vector3.sub &(Vector3.init 0.9 0.6 0.75) &(Vector3.init 0.7 0.1 0.25))
-                            compare (Vector3.init 0.2 0.5 0.5)]
-                     (println* "Result x: " (x &result))
-                     (println* "Compare x: " (x &compare))
-                     (println* "Result y: " (y &result))
-                     (println* "Compare y: " (y &compare))
-                     (println* "Result z: " (z &result))
-                     (println* "Compare z: " (z &compare))
-                     (println* "Result: " &result)
-                     (println* "Compare: " &compare)
-                     (= &result
-                        &compare))
-                   "Can subtract two vectors")
-      (assert-true test ;; This should pass put fails as well
-                   (my-equal &(Vector3.sub &(Vector3.init 0.9 0.6 0.75) &(Vector3.init 0.7 0.1 0.25))
-                       &(Vector3.init 0.2 0.5 0.5))
-                    "Can subtract two colors")
+                   (RayColor.equal? &(RayColor.sub &c1 &c2)
+                                 &(Vector3.init 0.2 0.5 0.5))
+                   "Can subtract two colors")
       (assert-true test
-                    (= &(RayColor.mul &c3 2.0)
-                       &(RayColor.init 0.4 0.6 0.8))
-                    "Can multiply a color by a scalar")
+                   (RayColor.equal? &(RayColor.mul &c3 2.0)
+                                    &(RayColor.init 0.4 0.6 0.8))
+                   "Can multiply a color by a scalar")
       )))
 
 (defn main []
