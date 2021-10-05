@@ -7,22 +7,23 @@
 
 (defmodule RayCanvas
 
+  (sig index-at (Fn [&RayCanvas Int Int] Int))
   (defn index-at [canvas x y]
-    (let [rows (height canvas)
-          cols (width canvas)]
+    (let [cols @(width canvas)]
       (+ (* y cols) x)))
 
+  (doc pixel-at "Returns a reference to a pixel. Unsafe!")
   (defn pixel-at [canvas x y]
-    (Array.unsafe-nth (RayCanvas.pixels canvas)
-                      @(RayCanvas.index-at canvas x y)))
+    (let [index (index-at canvas x y)]
+      (Array.unsafe-nth (RayCanvas.pixels canvas) index)))
 
   (defn write-pixel! [canvas x y color]
     (let [index (index-at canvas x y)]
-      (Array.aset! (RayCanvas.pixels canvas) @index @color)))
+      (Array.aset! (RayCanvas.pixels canvas) index @color)))
 
   (defn write-pixel [canvas x y color]
     (let [index (index-at canvas x y)
-          new-pixels (Array.aset @(RayCanvas.pixels canvas) @index @color)]
+          new-pixels (Array.aset @(RayCanvas.pixels canvas) index @color)]
       (RayCanvas.init
        @(RayCanvas.width canvas)
        @(RayCanvas.height canvas)
@@ -42,6 +43,21 @@
     (RayCanvas.init-pixels &pixel-array &(RayColor.init 0.0 0.0 0.0))
     (RayCanvas.init width height pixel-array)))
 
+(defn util-tests []
+  (let [c (canvas 10 20)
+        pixel (RayColor.init 0.0 0.0 0.0)]
+    (with-test test
+      (assert-equal test
+                    (RayCanvas.index-at &c 10 0)
+                    10
+                    "Returns a flat index position")
+      (assert-true test
+                   (Vector3.= 
+                    (RayCanvas.pixel-at &c 10 0)
+                    &(color 0.0 0.0 0.0))
+                   "Returns a reference to a pixel")
+      )))
+
 (defn canvas-tests []
   (let [c (canvas 10 20)
         pixel (RayColor.init 0.0 0.0 0.0)]
@@ -59,12 +75,13 @@
                     &(fn [el] (Vector3.= el &pixel))
                     (RayCanvas.pixels &c))
                     "Canvas is initialized to black pixels")
-      (assert-true test
-                   (Vector3.= (do (RayCanvas.write-pixel! &c 2 3 &(color 1.0 0.0 0.0))
-                                  (RayCanvas.pixel-at &c 2 3))
-                              &(color 1.0 0.0 0.0))
-                    "Writes a pixel in place")
+     (assert-true test
+                  (Vector3.= (do (RayCanvas.write-pixel! &c 2 3 &(color 1.0 0.0 0.0))
+                                 (RayCanvas.pixel-at &c 2 3))
+                             &(color 1.0 0.0 0.0))
+                   "Writes a pixel in place")
       )))
 
 (defn main []
-  (Array.sum &[(canvas-tests)]))
+  (Array.sum &[(util-tests)
+               (canvas-tests)]))
