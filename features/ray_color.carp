@@ -1,8 +1,6 @@
 (load-and-use Test)
 (load "Vector.carp")
 
-;(deftype RayColor Vector3)
-
 (defmodule RayColor
   (use Vector3) ;; Contrary to my initial belief, we can't "inherit" this way.
 
@@ -45,6 +43,9 @@
          (Double.approx (blue c1)
                  (blue c2))))
   )
+
+(defn color [r g b]
+  (RayColor.init r g b))
 
 (defn init-tests []
   (let [c (RayColor.init -0.5 0.4 1.7)]
